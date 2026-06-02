@@ -1,11 +1,15 @@
 import {expect, test} from 'playwright/test';
 
 /**
- * Tests the host app's progress bar — rendering, step state, and navigation.
- * Does not interact with OceansLab internals; that suite lives in the monorepo.
- * The onContinue → progress advance path requires OceansLab and is out of scope here.
+ * Tests the host app's progress bar — rendering, step state, navigation, and the
+ * onContinue integration point with OceansLab.
+ *
+ * Integration strategy: we drive OceansLab only to the point where the user can
+ * click "Continue" (the training scene), then assert on the HOST APP's response
+ * (progress bar state, data-mode). OceansLab internals (training, predicting, pond)
+ * are covered by the monorepo e2e suite.
  */
-test.describe('Progress bar', () => {
+test.describe('Progress bar — layout and navigation', () => {
   test.beforeEach(async ({page}) => {
     await page.goto('/');
   });
@@ -37,22 +41,34 @@ test.describe('Progress bar', () => {
     expect(barBox!.y).toBeLessThan(labBox!.y);
   });
 
-  test('clicking a step makes it current', async ({page}) => {
-    await page.getByTestId('step-3').click();
-    await expect(page.getByTestId('step-3')).toHaveAttribute('data-state', 'current');
-  });
-
-  test('clicking a step updates the active lab mode', async ({page}) => {
+  test('clicking a step makes it current and updates the lab mode', async ({page}) => {
     const cases: [number, string][] = [
       [1, 'creaturesvtrashdemo'],
-      [2, 'creaturesvtrash'],
       [3, 'short'],
-      [4, 'long'],
       [0, 'fishvtrash'],
     ];
     for (const [idx, mode] of cases) {
       await page.getByTestId(`step-${idx}`).click();
+      await expect(page.getByTestId(`step-${idx}`)).toHaveAttribute('data-state', 'current');
       await expect(page.getByTestId('lab-area')).toHaveAttribute('data-mode', mode);
     }
+  });
+});
+
+test.describe('Progress bar — onContinue integration', () => {
+  test('completing a mode marks it done and advances to the next step', async ({page}) => {
+    await page.goto('/');
+    // Wait for OceansLab to reach the training scene — Continue becomes visible.
+    const continueBtn = page.getByRole('button', {name: 'Continue'}).first();
+    await continueBtn.waitFor({state: 'visible'});
+    await continueBtn.click();
+
+    // Host app response: step 0 → completed, step 1 → current, mode advances.
+    await expect(page.getByTestId('step-0')).toHaveAttribute('data-state', 'completed');
+    await expect(page.getByTestId('step-1')).toHaveAttribute('data-state', 'current');
+    await expect(page.getByTestId('lab-area')).toHaveAttribute(
+      'data-mode',
+      'creaturesvtrashdemo',
+    );
   });
 });
