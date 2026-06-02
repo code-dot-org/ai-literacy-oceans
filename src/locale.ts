@@ -1,3 +1,31 @@
+/** All 24 supported locales (23 EU + English fallback) with native display names. */
+export const SUPPORTED_LOCALES: Record<string, string> = {
+  en: 'English',
+  bg: 'Български',
+  hr: 'Hrvatski',
+  cs: 'Čeština',
+  da: 'Dansk',
+  nl: 'Nederlands',
+  et: 'Eesti',
+  fi: 'Suomi',
+  fr: 'Français',
+  de: 'Deutsch',
+  el: 'Ελληνικά',
+  hu: 'Magyar',
+  ga: 'Gaeilge',
+  it: 'Italiano',
+  lv: 'Latviešu',
+  lt: 'Lietuvių',
+  mt: 'Malti',
+  pl: 'Polski',
+  pt: 'Português',
+  ro: 'Română',
+  sk: 'Slovenčina',
+  sl: 'Slovenščina',
+  es: 'Español',
+  sv: 'Svenska',
+};
+
 // 23 non-English official EU languages; English is the fallback.
 const EU_LOCALES = new Set([
   'bg', 'hr', 'cs', 'da', 'nl', 'et', 'fi', 'fr',
