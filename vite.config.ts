@@ -1,4 +1,3 @@
-import path from 'path';
 import react from '@vitejs/plugin-react';
 import {defineConfig} from 'vite';
 
@@ -12,7 +11,7 @@ export default defineConfig({
     // node-fetch is referenced inside the bundled oceans-lab dist (TF.js CJS shim).
     // Alias it to a browser shim for both dev server and build.
     alias: {
-      'node-fetch': path.resolve(__dirname, 'src/node-fetch-shim.ts'),
+      'node-fetch': new URL('./src/node-fetch-shim.ts', import.meta.url).pathname,
     },
   },
 });
