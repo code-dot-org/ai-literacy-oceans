@@ -106,5 +106,10 @@
   "mouths": "Maul",
   "colors": "Farben",
   "switchToMatchingItems": "Zu passenden Elementen wechseln",
-  "switchToNonMatchingItems": "Zu nicht passenden Elementen wechseln"
+  "switchToNonMatchingItems": "Zu nicht passenden Elementen wechseln",
+  "app-step-1": "K.I. trainieren",
+  "app-step-2": "Schau was passiert",
+  "app-step-3": "Nochmal trainieren",
+  "app-step-4": "Dein Wort wählen",
+  "app-step-5": "K.I. ein neues Wort beibringen"
 }

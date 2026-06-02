@@ -106,5 +106,10 @@
   "mouths": "ħalq",
   "colors": "kuluri",
   "switchToMatchingItems": "Ibdel għall-Oġġetti li Jaqblu",
-  "switchToNonMatchingItems": "Ibdel għall-Oġġetti li Ma Jaqblux"
+  "switchToNonMatchingItems": "Ibdel għall-Oġġetti li Ma Jaqblux",
+  "app-step-1": "Addestra l-I.A.",
+  "app-step-2": "Ara x'jiġri",
+  "app-step-3": "Addestra mill-ġdid",
+  "app-step-4": "Agħżel kelmtek",
+  "app-step-5": "Għallem kelma ġdida lill-I.A."
 }

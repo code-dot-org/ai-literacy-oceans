@@ -106,5 +106,10 @@
   "mouths": "mun",
   "colors": "färger",
   "switchToMatchingItems": "Byt till matchande föremål",
-  "switchToNonMatchingItems": "Byt till icke-matchande föremål"
+  "switchToNonMatchingItems": "Byt till icke-matchande föremål",
+  "app-step-1": "Träna K.I.",
+  "app-step-2": "Se vad som händer",
+  "app-step-3": "Träna igen",
+  "app-step-4": "Välj ditt ord",
+  "app-step-5": "Lär K.I. ett nytt ord"
 }

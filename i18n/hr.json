@@ -106,5 +106,10 @@
   "mouths": "usta",
   "colors": "boje",
   "switchToMatchingItems": "Prebaci na odgovarajuće stavke",
-  "switchToNonMatchingItems": "Prebaci na neodgovarajuće stavke"
+  "switchToNonMatchingItems": "Prebaci na neodgovarajuće stavke",
+  "app-step-1": "Treniraj U.I.",
+  "app-step-2": "Vidi što se događa",
+  "app-step-3": "Treniraj ponovo",
+  "app-step-4": "Odaberi svoju riječ",
+  "app-step-5": "Nauči U.I. novu riječ"
 }

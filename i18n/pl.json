@@ -106,5 +106,10 @@
   "mouths": "pysk",
   "colors": "kolory",
   "switchToMatchingItems": "Przełącz na pasujące elementy",
-  "switchToNonMatchingItems": "Przełącz na niepasujące elementy"
+  "switchToNonMatchingItems": "Przełącz na niepasujące elementy",
+  "app-step-1": "Trenuj S.I.",
+  "app-step-2": "Zobacz co się stanie",
+  "app-step-3": "Trenuj ponownie",
+  "app-step-4": "Wybierz swoje słowo",
+  "app-step-5": "Naucz S.I. nowego słowa"
 }

@@ -106,5 +106,10 @@
   "mouths": "suu",
   "colors": "värvid",
   "switchToMatchingItems": "Lülitu sobivate üksuste juurde",
-  "switchToNonMatchingItems": "Lülitu mittesobivate üksuste juurde"
+  "switchToNonMatchingItems": "Lülitu mittesobivate üksuste juurde",
+  "app-step-1": "Treenige T.I.",
+  "app-step-2": "Vaata mis juhtub",
+  "app-step-3": "Treenige uuesti",
+  "app-step-4": "Vali oma sõna",
+  "app-step-5": "Õpeta T.I. uus sõna"
 }

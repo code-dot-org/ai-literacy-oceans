@@ -106,5 +106,10 @@
   "mouths": "mute",
   "colors": "krāsas",
   "switchToMatchingItems": "Pārslēgties uz atbilstošajiem elementiem",
-  "switchToNonMatchingItems": "Pārslēgties uz neatbilstošajiem elementiem"
+  "switchToNonMatchingItems": "Pārslēgties uz neatbilstošajiem elementiem",
+  "app-step-1": "Trenē M.I.",
+  "app-step-2": "Skaties kas notiek",
+  "app-step-3": "Trenē vēlreiz",
+  "app-step-4": "Izvēlies savu vārdu",
+  "app-step-5": "Iemāci M.I. jaunu vārdu"
 }

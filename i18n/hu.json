@@ -106,5 +106,10 @@
   "mouths": "száj",
   "colors": "színek",
   "switchToMatchingItems": "Váltás az egyező elemekre",
-  "switchToNonMatchingItems": "Váltás a nem egyező elemekre"
+  "switchToNonMatchingItems": "Váltás a nem egyező elemekre",
+  "app-step-1": "Tanítsd a M.I.-t",
+  "app-step-2": "Nézd meg mi történik",
+  "app-step-3": "Tanítsd újra",
+  "app-step-4": "Válaszd a szavadat",
+  "app-step-5": "Taníts új szót a M.I.-nek"
 }

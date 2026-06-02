@@ -106,5 +106,10 @@
   "mouths": "gură",
   "colors": "culori",
   "switchToMatchingItems": "Comută la elementele corespunzătoare",
-  "switchToNonMatchingItems": "Comută la elementele necorespunzătoare"
+  "switchToNonMatchingItems": "Comută la elementele necorespunzătoare",
+  "app-step-1": "Antrenează I.A.",
+  "app-step-2": "Vezi ce se întâmplă",
+  "app-step-3": "Antrenează din nou",
+  "app-step-4": "Alege cuvântul tău",
+  "app-step-5": "Învaţă I.A. un cuvânt nou"
 }

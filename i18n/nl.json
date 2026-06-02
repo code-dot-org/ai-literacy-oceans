@@ -106,5 +106,10 @@
   "mouths": "mond",
   "colors": "kleuren",
   "switchToMatchingItems": "Schakel naar overeenkomende items",
-  "switchToNonMatchingItems": "Schakel naar niet-overeenkomende items"
+  "switchToNonMatchingItems": "Schakel naar niet-overeenkomende items",
+  "app-step-1": "K.I. trainen",
+  "app-step-2": "Kijk wat er gebeurt",
+  "app-step-3": "Opnieuw trainen",
+  "app-step-4": "Kies jouw woord",
+  "app-step-5": "K.I. een nieuw woord leren"
 }

@@ -106,5 +106,10 @@
   "mouths": "usta",
   "colors": "barve",
   "switchToMatchingItems": "Preklopi na ujemajoče se elemente",
-  "switchToNonMatchingItems": "Preklopi na neujemajoče se elemente"
+  "switchToNonMatchingItems": "Preklopi na neujemajoče se elemente",
+  "app-step-1": "Usposobi U.I.",
+  "app-step-2": "Poglej kaj se zgodi",
+  "app-step-3": "Usposobi znova",
+  "app-step-4": "Izberi svojo besedo",
+  "app-step-5": "Nauči U.I. novo besedo"
 }

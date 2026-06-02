@@ -106,5 +106,10 @@
   "mouths": "burna",
   "colors": "spalvos",
   "switchToMatchingItems": "Perjungti į atitinkančius elementus",
-  "switchToNonMatchingItems": "Perjungti į neatitinkančius elementus"
+  "switchToNonMatchingItems": "Perjungti į neatitinkančius elementus",
+  "app-step-1": "Mokyk D.I.",
+  "app-step-2": "Žiūrėk kas nutinka",
+  "app-step-3": "Mokyk vėl",
+  "app-step-4": "Pasirink savo žodį",
+  "app-step-5": "Išmokyk D.I. naują žodį"
 }

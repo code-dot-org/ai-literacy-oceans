@@ -106,5 +106,10 @@
   "mouths": "boca",
   "colors": "cores",
   "switchToMatchingItems": "Mudar para itens correspondentes",
-  "switchToNonMatchingItems": "Mudar para itens não correspondentes"
+  "switchToNonMatchingItems": "Mudar para itens não correspondentes",
+  "app-step-1": "Treinar a I.A.",
+  "app-step-2": "Ver o que acontece",
+  "app-step-3": "Treinar de novo",
+  "app-step-4": "Escolhe a tua palavra",
+  "app-step-5": "Ensinar uma nova palavra à I.A."
 }

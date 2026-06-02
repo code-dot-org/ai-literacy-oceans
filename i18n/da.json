@@ -106,5 +106,10 @@
   "mouths": "mund",
   "colors": "farver",
   "switchToMatchingItems": "Skift til matchende elementer",
-  "switchToNonMatchingItems": "Skift til ikke-matchende elementer"
+  "switchToNonMatchingItems": "Skift til ikke-matchende elementer",
+  "app-step-1": "Træn K.I.",
+  "app-step-2": "Se hvad der sker",
+  "app-step-3": "Træn igen",
+  "app-step-4": "Vælg dit ord",
+  "app-step-5": "Lær K.I. et nyt ord"
 }

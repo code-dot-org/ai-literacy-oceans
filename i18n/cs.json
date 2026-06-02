@@ -106,5 +106,10 @@
   "mouths": "ústa",
   "colors": "barvy",
   "switchToMatchingItems": "Přepnout na odpovídající položky",
-  "switchToNonMatchingItems": "Přepnout na neodpovídající položky"
+  "switchToNonMatchingItems": "Přepnout na neodpovídající položky",
+  "app-step-1": "Trénuj U.I.",
+  "app-step-2": "Podívej se co se stane",
+  "app-step-3": "Trénuj znovu",
+  "app-step-4": "Vyber své slovo",
+  "app-step-5": "Nauč U.I. nové slovo"
 }

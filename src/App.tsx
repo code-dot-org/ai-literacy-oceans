@@ -8,13 +8,20 @@ import {detectLocale, loadStrings, SUPPORTED_LOCALES} from './locale';
 
 // ── Sequence ────────────────────────────────────────────────────────────────
 
-const STEPS: Step[] = [
-  {index: 0, label: 'Fish vs Trash'},
-  {index: 1, label: 'Creatures Demo'},
-  {index: 2, label: 'Creatures vs Trash'},
-  {index: 3, label: 'Fish Short'},
-  {index: 4, label: 'Fish Long'},
+const EN_STEP_LABELS = [
+  'Train the A.I.',
+  'Watch What Happens',
+  'Train It Again',
+  'Pick Your Word',
+  'Teach AI a New Word',
 ];
+
+function buildSteps(strings: Record<string, string> | undefined): Step[] {
+  return EN_STEP_LABELS.map((enLabel, i) => ({
+    index: i,
+    label: strings?.[`app-step-${i + 1}`] ?? enLabel,
+  }));
+}
 
 const MODES = [
   'fishvtrash',
@@ -144,14 +151,17 @@ export default function App() {
     </select>
   );
 
+  const steps = buildSteps(strings);
   const progress = (
     <Progress
-      steps={STEPS}
+      steps={steps}
       currentIndex={done ? -1 : modeIndex}
-      completedIndices={done ? new Set(STEPS.map(s => s.index)) : completed}
+      completedIndices={done ? new Set(steps.map(s => s.index)) : completed}
       onNavigate={navigate}
     />
   );
+
+  const labHeight = `calc(100vh - ${PROGRESS_BAR_HEIGHT}px)`;
 
   if (done) {
     return (
@@ -161,11 +171,12 @@ export default function App() {
         <div
           data-testid="play-again-screen"
           style={{
+            marginTop: PROGRESS_BAR_HEIGHT,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             width: '100vw',
-            height: `calc(100vh - ${PROGRESS_BAR_HEIGHT}px)`,
+            height: labHeight,
             background: DARK_BG,
           }}
         >
@@ -197,15 +208,16 @@ export default function App() {
       {progress}
       <div
         style={{
+          marginTop: PROGRESS_BAR_HEIGHT,
           width: '100vw',
-          height: `calc(100vh - ${PROGRESS_BAR_HEIGHT}px)`,
+          height: labHeight,
           background: DARK_BG,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        <div style={{width: '100%', maxWidth: `calc((100vh - ${PROGRESS_BAR_HEIGHT}px) * 16 / 9)`}}>
+        <div style={{width: '100%', maxWidth: `calc(${labHeight} * 16 / 9)`}}>
           <OceansLab
             appMode={MODES[modeIndex] as AppMode}
             guides="HoC"

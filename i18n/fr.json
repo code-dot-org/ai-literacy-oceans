@@ -106,5 +106,10 @@
   "mouths": "bouche",
   "colors": "couleurs",
   "switchToMatchingItems": "Afficher les éléments correspondants",
-  "switchToNonMatchingItems": "Afficher les éléments non correspondants"
+  "switchToNonMatchingItems": "Afficher les éléments non correspondants",
+  "app-step-1": "Entraîner l'I.A.",
+  "app-step-2": "Regarder ce qui se passe",
+  "app-step-3": "Entraîner à nouveau",
+  "app-step-4": "Choisir ton mot",
+  "app-step-5": "Apprendre un nouveau mot à l'I.A."
 }

@@ -106,5 +106,10 @@
   "mouths": "suu",
   "colors": "värit",
   "switchToMatchingItems": "Vaihda vastaaviin kohteisiin",
-  "switchToNonMatchingItems": "Vaihda ei-vastaaviin kohteisiin"
+  "switchToNonMatchingItems": "Vaihda ei-vastaaviin kohteisiin",
+  "app-step-1": "Kouluta T.Ä.",
+  "app-step-2": "Katso mitä tapahtuu",
+  "app-step-3": "Kouluta uudelleen",
+  "app-step-4": "Valitse sanasi",
+  "app-step-5": "Opeta T.Ä. uusi sana"
 }
