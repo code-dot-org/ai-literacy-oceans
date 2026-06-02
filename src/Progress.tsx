@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 export interface Step {
   index: number;
@@ -14,7 +14,9 @@ interface ProgressProps {
 
 type StepState = 'completed' | 'current' | 'upcoming';
 
-const DOT_SIZE = 32;
+const DOT_SIZE = 28;
+// Labels are hidden below this viewport width (dots-only on mobile).
+const LABEL_BREAKPOINT = 480;
 
 const COLOR = {
   completed: '#22c55e',
@@ -88,6 +90,16 @@ export default function Progress({
   completedIndices,
   onNavigate,
 }: ProgressProps) {
+  const [showLabels, setShowLabels] = useState(
+    () => window.innerWidth >= LABEL_BREAKPOINT,
+  );
+  useEffect(() => {
+    const mq = window.matchMedia(`(min-width: ${LABEL_BREAKPOINT}px)`);
+    const handler = (e: MediaQueryListEvent) => setShowLabels(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
   return (
     <div
       style={{
@@ -98,7 +110,7 @@ export default function Progress({
         zIndex: 50,
         background: 'rgba(2,0,28,0.85)',
         backdropFilter: 'blur(8px)',
-        padding: '10px 24px 12px',
+        padding: showLabels ? '8px 24px 10px' : '8px 16px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -146,12 +158,12 @@ export default function Progress({
           })}
         </div>
 
-        {/* Row 2: labels centered under each dot */}
-        <div
+        {/* Row 2: labels centered under each dot — hidden on narrow screens */}
+        {showLabels && <div
           style={{
             display: 'flex',
             alignItems: 'flex-start',
-            marginTop: 6,
+            marginTop: 4,
           }}
         >
           {steps.map((step, i) => {
@@ -190,7 +202,7 @@ export default function Progress({
               </React.Fragment>
             );
           })}
-        </div>
+        </div>}
       </div>
     </div>
   );

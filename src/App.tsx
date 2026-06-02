@@ -76,7 +76,9 @@ function setLangParam(lang: string) {
 // ── App ─────────────────────────────────────────────────────────────────────
 
 const DARK_BG = 'rgb(2, 0, 28)';
-const PROGRESS_BAR_HEIGHT = 62;
+// Matches the tallest bar state (labels visible). On mobile (dots-only) the
+// bar is shorter but we keep the same margin to avoid a layout jump on resize.
+const PROGRESS_BAR_HEIGHT = 54;
 
 export default function App() {
   const session = loadSession();
