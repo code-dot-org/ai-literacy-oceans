@@ -130,8 +130,8 @@ export default function App() {
       onChange={e => handleLocaleChange(e.target.value)}
       style={{
         position: 'fixed',
-        top: 8,
-        right: 8,
+        bottom: 8,
+        left: 8,
         zIndex: 100,
         background: 'rgba(0,0,0,0.6)',
         color: 'white',
