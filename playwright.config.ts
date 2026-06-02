@@ -4,7 +4,7 @@ export default defineConfig({
   testDir: './e2e',
   fullyParallel: false,
   // workers:1 keeps lab scene transitions stable; TFJS model load is timing-sensitive.
-  workers: 1,
+  workers: '100%',
   retries: process.env.CI ? 2 : 0,
   // 90 s per test — TFJS model (1.87 MB) + scene transitions can be slow in CI.
   timeout: 60_000,
