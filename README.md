@@ -5,16 +5,31 @@ A self-contained, embeddable web app that sequences the five interactive modes o
 ## Embedding
 
 ```html
-<!-- Responsive wrapper: 16:9 canvas + 62px progress bar -->
-<div style="position:relative; width:100%; padding-top:calc(56.25% + 62px);">
-  <iframe
-    src="https://code-dot-org.github.io/ai-literacy-oceans/"
-    style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;"
-    allow="microphone"
-    title="AI for Oceans">
-  </iframe>
-</div>
+<!--
+  The iframe content = progress bar (static height) + 16:9 canvas stacked.
+  Set width on the iframe and let JS measure the inner content height so the
+  canvas is always an exact 16:9 rectangle with no scroll or overlap.
+-->
+<iframe
+  id="oceans"
+  src="https://code-dot-org.github.io/ai-literacy-oceans/"
+  style="width:100%; border:none; display:block;"
+  allow="microphone"
+  title="AI for Oceans">
+</iframe>
+<script>
+  const f = document.getElementById('oceans');
+  f.addEventListener('load', () => {
+    const sync = () => {
+      f.style.height = f.contentDocument.documentElement.scrollHeight + 'px';
+    };
+    sync();
+    new ResizeObserver(sync).observe(f.contentDocument.documentElement);
+  });
+</script>
 ```
+
+**Why not `aspect-ratio: 16/9`?** The iframe is taller than 16:9 because the progress bar sits above the 16:9 canvas. The canvas itself is always 16:9; the bar adds fixed height on top.
 
 ### Contract
 

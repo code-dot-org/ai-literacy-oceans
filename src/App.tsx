@@ -76,9 +76,6 @@ function setLangParam(lang: string) {
 // ── App ─────────────────────────────────────────────────────────────────────
 
 const DARK_BG = 'rgb(2, 0, 28)';
-// Matches the tallest bar state (labels visible). On mobile (dots-only) the
-// bar is shorter but we keep the same margin to avoid a layout jump on resize.
-const PROGRESS_BAR_HEIGHT = 54;
 
 export default function App() {
   const session = loadSession();
@@ -163,24 +160,33 @@ export default function App() {
     />
   );
 
-  const labHeight = `calc(100vh - ${PROGRESS_BAR_HEIGHT}px)`;
+  // Flex column: bar (natural height) → canvas (fills rest). The canvas
+  // constrains itself to 16:9 via aspect-ratio; the iframe embed adds the
+  // bar height on top of the 16:9 canvas height.
+  const column: React.CSSProperties = {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100vh',
+    background: DARK_BG,
+    overflow: 'hidden',
+  };
+
+  const canvasArea: React.CSSProperties = {
+    flex: 1,
+    minHeight: 0, // allow flex child to shrink below content size
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  };
 
   if (done) {
     return (
-      <>
+      <div style={column}>
         {langSelector}
         {progress}
         <div
           data-testid="play-again-screen"
-          style={{
-            marginTop: PROGRESS_BAR_HEIGHT,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '100vw',
-            height: labHeight,
-            background: DARK_BG,
-          }}
+          style={{...canvasArea}}
         >
           <button
             data-testid="play-again-btn"
@@ -200,37 +206,30 @@ export default function App() {
             Play Again
           </button>
         </div>
-      </>
+      </div>
     );
   }
 
   return (
-    <>
+    <div style={column}>
       {langSelector}
       {progress}
       <div
         data-testid="lab-area"
         data-mode={MODES[modeIndex]}
-        style={{
-          marginTop: PROGRESS_BAR_HEIGHT,
-          width: '100vw',
-          height: labHeight,
-          background: DARK_BG,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
+        style={canvasArea}
       >
-        <div style={{width: '100%', maxWidth: `calc(${labHeight} * 16 / 9)`}}>
+        {/* height:100% + aspect-ratio gives a true 16:9 box inside the flex area */}
+        <div style={{height: '100%', aspectRatio: '16/9', maxWidth: '100%'}}>
           <OceansLab
-              appMode={MODES[modeIndex] as AppMode}
-              guides="HoC"
-              textToSpeechLocale={locale !== 'en' ? locale : undefined}
-              strings={strings}
-              onContinue={handleContinue}
-            />
+            appMode={MODES[modeIndex] as AppMode}
+            guides="HoC"
+            textToSpeechLocale={locale !== 'en' ? locale : undefined}
+            strings={strings}
+            onContinue={handleContinue}
+          />
         </div>
       </div>
-    </>
+    </div>
   );
 }

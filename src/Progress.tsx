@@ -103,14 +103,9 @@ export default function Progress({
   return (
     <div
       style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 50,
-        background: 'rgba(2,0,28,0.85)',
-        backdropFilter: 'blur(8px)',
+        background: 'rgba(2,0,28,0.95)',
         padding: showLabels ? '8px 24px 10px' : '8px 16px',
+        flexShrink: 0,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
