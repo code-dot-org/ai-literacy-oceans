@@ -42,6 +42,7 @@ jobs:
       - name: E2E Tests
         env:
           PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CI: true
         run: pnpm test:ui:ci
 
