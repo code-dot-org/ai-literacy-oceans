@@ -14,23 +14,30 @@
     }
     h1 { font-size: 20px; margin-bottom: 8px; }
     p  { font-size: 14px; color: #4a5568; margin-bottom: 20px; }
-
     .embed-container { width: 100%; max-width: 960px; margin: 0 auto; }
 
     /*
-     * The iframe content = progress bar (static height) + 16:9 canvas.
-     * We use a JS ResizeObserver below to set the iframe height precisely
-     * rather than hardcoding a pixel offset that might drift.
-     * Fallback while JS loads: generous initial height.
+     * Responsive wrapper for the iframe.
+     *
+     * Total iframe height = 16:9 canvas + progress bar above it.
+     *   56.25% = canvas height (9/16 of container width)
+     *   52px   = progress bar height (dots + labels row)
+     *
+     * If the bar height changes in the app, update this value to match.
      */
-    #oceans-frame {
+    .iframe-wrapper {
+      position: relative;
       width: 100%;
-      height: calc(56.25vw + 52px); /* 9/16 of viewport + approx bar */
-      max-height: calc(56.25% + 52px);
-      border: none;
-      display: block;
+      padding-top: calc(56.25% + 52px);
       border-radius: 8px;
+      overflow: hidden;
       box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+    }
+    .iframe-wrapper iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: none;
     }
 
     .caption {
@@ -39,82 +46,32 @@
       color: #718096;
       text-align: center;
     }
-    .lang-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-    }
-    .lang-row a {
-      font-size: 13px;
-      padding: 4px 10px;
-      background: #fff;
-      border: 1px solid #cbd5e0;
-      border-radius: 4px;
-      text-decoration: none;
-      color: #2d3748;
-    }
-    .lang-row a:hover { background: #ebf8ff; border-color: #90cdf4; }
   </style>
 </head>
 <body>
   <div class="embed-container">
     <h1>AI for Oceans — iframe embed test</h1>
     <p>
-      Simulates the host-page embed. The iframe height =
-      <strong>16:9 canvas height + progress bar height</strong>.
-      The canvas is always a true 16:9 rectangle; the bar sits above it.
+      Responsive embed: <code>padding-top: calc(56.25% + 52px)</code> —
+      the 16:9 canvas height plus the fixed progress bar above it.
     </p>
 
-    <div class="lang-row">
-      <strong style="font-size:13px;align-self:center">Locale:</strong>
-      <a href="?">auto</a>
-      <a href="?lang=fr">FR</a>
-      <a href="?lang=de">DE</a>
-      <a href="?lang=es">ES</a>
-      <a href="?lang=it">IT</a>
-      <a href="?lang=pl">PL</a>
-      <a href="?lang=el">EL</a>
-      <a href="?lang=xx">xx (fallback)</a>
+    <p style="font-size:13px;color:#4a5568;margin-bottom:12px;">
+      To test a locale: append <code>?lang=fr</code> (or any EU code) to the iframe
+      <code>src</code> URL directly, e.g.
+      <code>/ai-literacy-oceans/?lang=fr</code>.
+    </p>
+
+    <div class="iframe-wrapper">
+      <iframe
+        src="/ai-literacy-oceans/"
+        allow="microphone"
+        title="AI for Oceans">
+      </iframe>
     </div>
-
-    <iframe
-      id="oceans-frame"
-      src="/ai-literacy-oceans/"
-      allow="microphone"
-      title="AI for Oceans"
-    ></iframe>
-
     <p class="caption">
-      iframe height set via ResizeObserver on the inner document:
-      canvas_height (16:9) + bar_height (dynamic).
+      Canvas is always 16:9. Progress bar sits above it, not overlapping it.
     </p>
   </div>
-
-  <script>
-    const frame = document.getElementById('oceans-frame');
-
-    // Forward ?lang= from this page into the iframe.
-    const lang = new URLSearchParams(location.search).get('lang');
-    if (lang) frame.src = '/ai-literacy-oceans/' + (lang ? '?lang=' + lang : '');
-
-    // Once the iframe loads, sync its height to inner content height so the
-    // host page always shows bar + 16:9 canvas without scroll bars.
-    frame.addEventListener('load', () => {
-      try {
-        const syncHeight = () => {
-          const inner = frame.contentDocument?.documentElement;
-          if (inner) frame.style.height = inner.scrollHeight + 'px';
-        };
-        syncHeight();
-        // Re-sync on resize (bar height may change if labels wrap/unwrap).
-        new ResizeObserver(syncHeight).observe(
-          frame.contentDocument.documentElement
-        );
-      } catch {
-        // Cross-origin fallback: frame is same-origin in production.
-      }
-    });
-  </script>
 </body>
 </html>
