@@ -1,4 +1,4 @@
-import type {CSSProperties} from 'react';
+import React from 'react';
 
 export interface Step {
   index: number;
@@ -14,26 +14,32 @@ interface ProgressProps {
 
 type StepState = 'completed' | 'current' | 'upcoming';
 
-const COLORS = {
+const DOT_SIZE = 32;
+
+const COLOR = {
   completed: '#22c55e',
   current: '#38bdf8',
-  upcoming: 'rgba(255,255,255,0.2)',
-  line: 'rgba(255,255,255,0.15)',
-  lineFilled: '#22c55e',
-  text: 'rgba(255,255,255,0.9)',
-  textDim: 'rgba(255,255,255,0.4)',
+  upcoming: 'transparent',
+  lineActive: '#22c55e',
+  lineInactive: 'rgba(255,255,255,0.15)',
+  textBright: 'rgba(255,255,255,0.9)',
+  textDim: 'rgba(255,255,255,0.55)',
 };
 
-function stepState(index: number, current: number, completed: ReadonlySet<number>): StepState {
+function getState(
+  index: number,
+  current: number,
+  completed: ReadonlySet<number>,
+): StepState {
   if (completed.has(index)) return 'completed';
   if (index === current) return 'current';
   return 'upcoming';
 }
 
 function Dot({state, number}: {state: StepState; number: number}) {
-  const base: CSSProperties = {
-    width: 32,
-    height: 32,
+  const shared = {
+    width: DOT_SIZE,
+    height: DOT_SIZE,
     borderRadius: '50%',
     display: 'flex',
     alignItems: 'center',
@@ -41,38 +47,33 @@ function Dot({state, number}: {state: StepState; number: number}) {
     fontFamily: 'sans-serif',
     fontWeight: 700,
     fontSize: 13,
-    flexShrink: 0,
     transition: 'background 0.25s, box-shadow 0.25s',
-  };
+    flexShrink: 0,
+  } as const;
 
   if (state === 'completed') {
-    return (
-      <div style={{...base, background: COLORS.completed, color: '#fff'}}>
-        ✓
-      </div>
-    );
+    return <div style={{...shared, background: COLOR.completed, color: '#fff'}}>✓</div>;
   }
   if (state === 'current') {
     return (
       <div
         style={{
-          ...base,
-          background: COLORS.current,
+          ...shared,
+          background: COLOR.current,
           color: '#fff',
-          boxShadow: `0 0 0 4px rgba(56,189,248,0.3)`,
+          boxShadow: '0 0 0 4px rgba(56,189,248,0.3)',
         }}
       >
         {number}
       </div>
     );
   }
-  // Upcoming: white outline — looks like an unselected tab, not a locked step.
   return (
     <div
       style={{
-        ...base,
-        background: 'transparent',
-        border: `2px solid rgba(255,255,255,0.5)`,
+        ...shared,
+        background: COLOR.upcoming,
+        border: '2px solid rgba(255,255,255,0.5)',
         color: 'rgba(255,255,255,0.7)',
       }}
     >
@@ -81,7 +82,12 @@ function Dot({state, number}: {state: StepState; number: number}) {
   );
 }
 
-export default function Progress({steps, currentIndex, completedIndices, onNavigate}: ProgressProps) {
+export default function Progress({
+  steps,
+  currentIndex,
+  completedIndices,
+  onNavigate,
+}: ProgressProps) {
   return (
     <div
       style={{
@@ -92,83 +98,99 @@ export default function Progress({steps, currentIndex, completedIndices, onNavig
         zIndex: 50,
         background: 'rgba(2,0,28,0.85)',
         backdropFilter: 'blur(8px)',
-        padding: '10px 24px 14px',
+        padding: '10px 24px 12px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
       }}
     >
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'flex-start',
-          gap: 0,
-          maxWidth: 600,
-          width: '100%',
-        }}
-      >
-        {steps.map((step, i) => {
-          const state = stepState(step.index, currentIndex, completedIndices);
-          const isLast = i === steps.length - 1;
-
-          return (
-            <div
-              key={step.index}
-              style={{display: 'flex', alignItems: 'flex-start', flex: isLast ? 0 : 1}}
-            >
-              {/* Step */}
-              <button
-                data-testid={`step-${step.index}`}
-                data-state={stepState(step.index, currentIndex, completedIndices)}
-                onClick={() => onNavigate(step.index)}
-                title={step.label}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  padding: 0,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 4,
-                  flexShrink: 0,
-                }}
-              >
-                <Dot state={state} number={step.index + 1} />
-                <span
+      <div style={{width: '100%', maxWidth: 640}}>
+        {/* Row 1: dots + connector lines — fixed height, connectors stay centered */}
+        <div style={{display: 'flex', alignItems: 'center'}}>
+          {steps.map((step, i) => {
+            const state = getState(step.index, currentIndex, completedIndices);
+            const isLast = i === steps.length - 1;
+            return (
+              <React.Fragment key={step.index}>
+                <button
+                  data-testid={`step-${step.index}`}
+                  data-state={state}
+                  onClick={() => onNavigate(step.index)}
                   style={{
-                    fontSize: 10,
-                    fontFamily: 'sans-serif',
-                    color: state === 'upcoming' ? 'rgba(255,255,255,0.6)' : COLORS.text,
-                    whiteSpace: 'nowrap',
-                    maxWidth: 72,
-                    textAlign: 'center',
-                    lineHeight: 1.2,
-                    transition: 'color 0.25s',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: 0,
+                    flexShrink: 0,
+                    lineHeight: 0,
                   }}
+                  aria-label={step.label}
                 >
-                  {step.label}
-                </span>
-              </button>
+                  <Dot state={state} number={step.index + 1} />
+                </button>
+                {!isLast && (
+                  <div
+                    style={{
+                      flex: 1,
+                      height: 2,
+                      background: completedIndices.has(step.index)
+                        ? COLOR.lineActive
+                        : COLOR.lineInactive,
+                      transition: 'background 0.4s',
+                      minWidth: 12,
+                    }}
+                  />
+                )}
+              </React.Fragment>
+            );
+          })}
+        </div>
 
-              {/* Connector line */}
-              {!isLast && (
+        {/* Row 2: labels centered under each dot */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            marginTop: 6,
+          }}
+        >
+          {steps.map((step, i) => {
+            const state = getState(step.index, currentIndex, completedIndices);
+            const isLast = i === steps.length - 1;
+            return (
+              <React.Fragment key={step.index}>
+                {/* Label occupies the same width as the dot so it centers under it */}
                 <div
                   style={{
-                    flex: 1,
-                    height: 2,
-                    marginTop: 15,
-                    background: completedIndices.has(step.index)
-                      ? COLORS.lineFilled
-                      : COLORS.line,
-                    transition: 'background 0.4s',
-                    minWidth: 16,
+                    width: DOT_SIZE,
+                    flexShrink: 0,
+                    display: 'flex',
+                    justifyContent: 'center',
                   }}
-                />
-              )}
-            </div>
-          );
-        })}
+                >
+                  <span
+                    style={{
+                      display: 'block',
+                      width: 72,
+                      textAlign: 'center',
+                      fontSize: 10,
+                      fontFamily: 'sans-serif',
+                      lineHeight: 1.3,
+                      color: state === 'upcoming' ? COLOR.textDim : COLOR.textBright,
+                      transition: 'color 0.25s',
+                      wordBreak: 'break-word',
+                      hyphens: 'auto',
+                    }}
+                  >
+                    {step.label}
+                  </span>
+                </div>
+                {/* Spacer that mirrors the connector line so labels stay aligned */}
+                {!isLast && <div style={{flex: 1, minWidth: 12}} />}
+              </React.Fragment>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
