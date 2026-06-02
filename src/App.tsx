@@ -76,6 +76,7 @@ function setLangParam(lang: string) {
 // ── App ─────────────────────────────────────────────────────────────────────
 
 const DARK_BG = 'rgb(2, 0, 28)';
+const PROGRESS_BAR_HEIGHT = 62;
 
 export default function App() {
   const session = loadSession();
@@ -160,6 +161,8 @@ export default function App() {
     />
   );
 
+  const labHeight = `calc(100vh - ${PROGRESS_BAR_HEIGHT}px)`;
+
   if (done) {
     return (
       <>
@@ -168,11 +171,12 @@ export default function App() {
         <div
           data-testid="play-again-screen"
           style={{
+            marginTop: PROGRESS_BAR_HEIGHT,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             width: '100vw',
-            height: '100vh',
+            height: labHeight,
             background: DARK_BG,
           }}
         >
@@ -206,15 +210,16 @@ export default function App() {
         data-testid="lab-area"
         data-mode={MODES[modeIndex]}
         style={{
+          marginTop: PROGRESS_BAR_HEIGHT,
           width: '100vw',
-          height: '100vh',
+          height: labHeight,
           background: DARK_BG,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        <div style={{width: '100%', maxWidth: 'calc(100vh * 16 / 9)'}}>
+        <div style={{width: '100%', maxWidth: `calc(${labHeight} * 16 / 9)`}}>
           <OceansLab
               appMode={MODES[modeIndex] as AppMode}
               guides="HoC"

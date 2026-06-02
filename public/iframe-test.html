@@ -21,11 +21,12 @@
       margin: 0 auto;
     }
 
-    /* Responsive 16:9 wrapper — the standard host-page embed pattern. */
+    /* Responsive wrapper: 16:9 canvas + 62px progress bar above it.
+       padding-top = 56.25% (9/16 canvas) + 62px (fixed bar). */
     .aspect-box {
       position: relative;
       width: 100%;
-      padding-top: 56.25%; /* 9/16 */
+      padding-top: calc(56.25% + 62px);
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 4px 24px rgba(0,0,0,0.15);
@@ -94,7 +95,8 @@
     </div>
     <p class="caption">
       Embedded via <code>&lt;iframe src="/ai-literacy-oceans/"&gt;</code> in a
-      56.25 % padding-top aspect-ratio wrapper (standard 16:9 responsive embed).
+      <code>calc(56.25% + 62px)</code> padding-top wrapper
+      (16:9 canvas + 62px progress bar).
     </p>
   </div>
 

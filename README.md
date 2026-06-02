@@ -5,13 +5,15 @@ A self-contained, embeddable web app that sequences the five interactive modes o
 ## Embedding
 
 ```html
-<iframe
-  src="https://code-dot-org.github.io/ai-literacy-oceans/"
-  width="100%"
-  style="aspect-ratio: 16/9; border: none;"
-  allow="microphone"
-  title="AI for Oceans">
-</iframe>
+<!-- Responsive wrapper: 16:9 canvas + 62px progress bar -->
+<div style="position:relative; width:100%; padding-top:calc(56.25% + 62px);">
+  <iframe
+    src="https://code-dot-org.github.io/ai-literacy-oceans/"
+    style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;"
+    allow="microphone"
+    title="AI for Oceans">
+  </iframe>
+</div>
 ```
 
 ### Contract
