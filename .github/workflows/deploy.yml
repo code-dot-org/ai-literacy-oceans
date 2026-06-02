@@ -29,19 +29,23 @@ jobs:
         with:
           node-version: 20
 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
-        run: npm run build
+        run: pnpm build
 
       - name: E2E Tests
         env:
           PLAYWRIGHT_BROWSERS_PATH: /ms-playwright
           CI: true
-        run: npm run test:ui:ci
+        run: pnpm test:ui:ci
 
       - name: Upload Playwright report
         if: failure()
@@ -65,13 +69,17 @@ jobs:
         with:
           node-version: 20
 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
-        run: npm run build
+        run: pnpm build
 
       - uses: actions/configure-pages@v5
 
