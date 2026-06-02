@@ -7,4 +7,11 @@ export default defineConfig({
   define: {
     global: 'globalThis',
   },
+  build: {
+    rollupOptions: {
+      // node-fetch is referenced inside the bundled oceans-lab dist (via TF.js).
+      // Browsers have native fetch; exclude the Node shim from the bundle.
+      external: ['node-fetch'],
+    },
+  },
 });
