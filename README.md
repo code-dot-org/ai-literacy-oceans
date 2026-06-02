@@ -49,13 +49,11 @@ npm run preview
 
 ### GitHub Packages auth
 
-The `@code-dot-org/oceans-lab` package lives on GitHub Packages. You need a token with `read:packages` scope:
+The `@code-dot-org/oceans-lab` package lives on GitHub Packages under the `code-dot-org` org. In CI the deploy workflow uses `GITHUB_TOKEN` (automatic, no secret needed). Locally you need a token with `read:packages`:
 
 ```bash
 echo "//npm.pkg.github.com/:_authToken=YOUR_TOKEN" >> ~/.npmrc
 ```
-
-In CI, set the `PACKAGES_READ_TOKEN` repository secret.
 
 ## Testing
 
