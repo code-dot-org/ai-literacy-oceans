@@ -107,9 +107,9 @@
   "colors": "colori",
   "switchToMatchingItems": "Passa agli elementi corrispondenti",
   "switchToNonMatchingItems": "Passa agli elementi non corrispondenti",
-  "app-step-1": "Addestrare l'I.A.",
-  "app-step-2": "Guarda cosa succede",
-  "app-step-3": "Addestrare di nuovo",
-  "app-step-4": "Scegli la tua parola",
+  "app-step-1": "Etichettare pesci e rifiuti",
+  "app-step-2": "Il bias in azione",
+  "app-step-3": "Riaddestrare equamente",
+  "app-step-4": "Scegliere una parola semplice",
   "app-step-5": "Insegnare una nuova parola all'I.A."
 }

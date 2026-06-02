@@ -107,9 +107,9 @@
   "colors": "boje",
   "switchToMatchingItems": "Prebaci na odgovarajuće stavke",
   "switchToNonMatchingItems": "Prebaci na neodgovarajuće stavke",
-  "app-step-1": "Treniraj U.I.",
-  "app-step-2": "Vidi što se događa",
-  "app-step-3": "Treniraj ponovo",
-  "app-step-4": "Odaberi svoju riječ",
+  "app-step-1": "Označi ribe i smeće",
+  "app-step-2": "Pristranost u akciji",
+  "app-step-3": "Treniraj pravednije",
+  "app-step-4": "Odaberi jednostavnu riječ",
   "app-step-5": "Nauči U.I. novu riječ"
 }

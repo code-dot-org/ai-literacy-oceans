@@ -9,10 +9,10 @@ import {detectLocale, loadStrings, SUPPORTED_LOCALES} from './locale';
 // ── Sequence ────────────────────────────────────────────────────────────────
 
 const EN_STEP_LABELS = [
-  'Train the A.I.',
-  'Watch What Happens',
-  'Train It Again',
-  'Pick Your Word',
+  'Label Fish & Trash',
+  'Bias in Action',
+  'Retrain Fairly',
+  'Pick a Simple Word',
   'Teach AI a New Word',
 ];
 
@@ -207,6 +207,8 @@ export default function App() {
       {langSelector}
       {progress}
       <div
+        data-testid="lab-area"
+        data-mode={MODES[modeIndex]}
         style={{
           marginTop: PROGRESS_BAR_HEIGHT,
           width: '100vw',

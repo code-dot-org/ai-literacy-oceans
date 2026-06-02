@@ -107,9 +107,9 @@
   "colors": "colores",
   "switchToMatchingItems": "Cambiar a elementos coincidentes",
   "switchToNonMatchingItems": "Cambiar a elementos no coincidentes",
-  "app-step-1": "Entrenar la I.A.",
-  "app-step-2": "Ver qué pasa",
-  "app-step-3": "Entrenar de nuevo",
-  "app-step-4": "Elige tu palabra",
+  "app-step-1": "Etiquetar peces y basura",
+  "app-step-2": "El sesgo en acción",
+  "app-step-3": "Reentrenar con justicia",
+  "app-step-4": "Elegir una palabra simple",
   "app-step-5": "Enseñar una nueva palabra a la I.A."
 }

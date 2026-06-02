@@ -1,45 +1,38 @@
 import {expect, test} from 'playwright/test';
 
-import {LabPage} from './poms/LabPage';
-import {SequencerPage} from './poms/SequencerPage';
-
-test.describe('Locale auto-detection', () => {
-  test('renders in French when browser language is fr', async ({browser}) => {
-    const ctx = await browser.newContext({locale: 'fr-FR'});
-    const page = await ctx.newPage();
-    const seq = new SequencerPage(page);
-    const lab = new LabPage(page);
-    await seq.goto();
-    await lab.waitForTrainingScene();
-    // French translation for "Continue" button should be "Continuer".
-    await expect(lab.trainingContinueButton).toHaveText(/Continuer/i);
-    await ctx.close();
+test.describe('Locale — host app', () => {
+  test('?lang=fr shows French step labels', async ({page}) => {
+    await page.goto('/?lang=fr');
+    await expect(page.getByTestId('step-0')).toContainText("Entraîner l'I.A.");
+    await expect(page.getByTestId('step-4')).toContainText('Apprendre un nouveau mot');
   });
 
-  test('falls back to English for a non-EU browser language (ja)', async ({
-    browser,
-  }) => {
-    const ctx = await browser.newContext({locale: 'ja-JP'});
-    const page = await ctx.newPage();
-    const lab = new LabPage(page);
-    const seq = new SequencerPage(page);
-    await seq.goto();
-    await lab.waitForTrainingScene();
-    // English "Continue" button present.
-    await expect(lab.trainingContinueButton).toHaveText(/Continue/i);
-    await ctx.close();
+  test('?lang=de shows German step labels', async ({page}) => {
+    await page.goto('/?lang=de');
+    await expect(page.getByTestId('step-0')).toContainText('K.I. trainieren');
   });
 
-  test('maps pt-BR to English fallback (not EU Portuguese)', async ({
-    browser,
-  }) => {
-    const ctx = await browser.newContext({locale: 'pt-BR'});
-    const page = await ctx.newPage();
-    const lab = new LabPage(page);
-    const seq = new SequencerPage(page);
-    await seq.goto();
-    await lab.waitForTrainingScene();
-    await expect(lab.trainingContinueButton).toHaveText(/Continue/i);
-    await ctx.close();
+  test('?lang=<invalid> falls back to English', async ({page}) => {
+    await page.goto('/?lang=xx');
+    await expect(page.getByTestId('step-0')).toContainText('Train the A.I.');
+  });
+
+  test('language dropdown is visible and shows current locale', async ({page}) => {
+    await page.goto('/?lang=es');
+    const select = page.getByLabel('Language');
+    await expect(select).toBeVisible();
+    await expect(select).toHaveValue('es');
+  });
+
+  test('changing dropdown updates URL param', async ({page}) => {
+    await page.goto('/');
+    await page.getByLabel('Language').selectOption('de');
+    expect(page.url()).toContain('lang=de');
+  });
+
+  test('changing dropdown updates step labels immediately', async ({page}) => {
+    await page.goto('/');
+    await page.getByLabel('Language').selectOption('it');
+    await expect(page.getByTestId('step-0')).toContainText("Addestrare l'I.A.");
   });
 });

@@ -118,6 +118,8 @@ export default function Progress({steps, currentIndex, completedIndices, onNavig
             >
               {/* Step */}
               <button
+                data-testid={`step-${step.index}`}
+                data-state={stepState(step.index, currentIndex, completedIndices)}
                 onClick={() => onNavigate(step.index)}
                 title={step.label}
                 style={{

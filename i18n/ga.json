@@ -107,9 +107,9 @@
   "colors": "dathanna",
   "switchToMatchingItems": "Athraigh go Míreanna Meaitseálacha",
   "switchToNonMatchingItems": "Athraigh go Míreanna Neamh-Mheaitseálacha",
-  "app-step-1": "Traenáil an I.S.",
-  "app-step-2": "Féach cad a tharlaíonn",
-  "app-step-3": "Traenáil arís",
-  "app-step-4": "Roghnaigh do Focal",
+  "app-step-1": "Lipéadaigh Éisc & Bruscar",
+  "app-step-2": "An Claontacht i gCleachtas",
+  "app-step-3": "Traenáil níos cothroime",
+  "app-step-4": "Roghnaigh focal simplí",
   "app-step-5": "Múin focal nua don I.S."
 }
