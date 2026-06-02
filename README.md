@@ -6,7 +6,7 @@ A self-contained, embeddable web app that sequences the five interactive modes o
 
 ```html
 <!-- padding-top = 9/16 canvas + 52px progress bar -->
-<div style="position:relative; width:100%; padding-top:calc(56.25% + 48px);">
+<div style="position:relative; width:100%; padding-top:calc(56.25% + 32px);">
   <iframe
     src="https://code-dot-org.github.io/ai-literacy-oceans/"
     style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;"
@@ -15,7 +15,9 @@ A self-contained, embeddable web app that sequences the five interactive modes o
 </div>
 ```
 
-The canvas is always 16:9. The progress bar sits above it — the iframe is taller than 16:9 by the bar's height (52px).
+The canvas is always 16:9. The progress bar sits above it — the iframe is taller than 16:9 by the bar's height (~32px).
+The iframe container should be at least **1024px wide** so the 16:9 canvas reaches 576px height,
+which is OceansLab's designed canvas height. Below 1024px the word-selection scene clips.
 
 ### Contract
 

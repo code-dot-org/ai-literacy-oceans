@@ -14,7 +14,9 @@
     }
     h1 { font-size: 20px; margin-bottom: 8px; }
     p  { font-size: 14px; color: #4a5568; margin-bottom: 20px; }
-    .embed-container { width: 100%; max-width: 960px; margin: 0 auto; }
+    /* 1024px minimum: OceansLab's word scene is designed for a 1024×576 canvas.
+       At narrower widths the 16:9 canvas is shorter than 576px and clips buttons. */
+    .embed-container { width: 100%; max-width: 1280px; min-width: 1024px; margin: 0 auto; overflow-x: auto; }
 
     /*
      * Responsive wrapper for the iframe.
@@ -28,7 +30,7 @@
     .iframe-wrapper {
       position: relative;
       width: 100%;
-      padding-top: calc(56.25% + 48px);
+      padding-top: calc(56.25% + 32px);
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 4px 24px rgba(0,0,0,0.15);
