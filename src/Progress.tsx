@@ -66,13 +66,14 @@ function Dot({state, number}: {state: StepState; number: number}) {
       </div>
     );
   }
+  // Upcoming: white outline — looks like an unselected tab, not a locked step.
   return (
     <div
       style={{
         ...base,
         background: 'transparent',
-        border: `2px solid ${COLORS.upcoming}`,
-        color: COLORS.textDim,
+        border: `2px solid rgba(255,255,255,0.5)`,
+        color: 'rgba(255,255,255,0.7)',
       }}
     >
       {number}
@@ -136,7 +137,7 @@ export default function Progress({steps, currentIndex, completedIndices, onNavig
                   style={{
                     fontSize: 10,
                     fontFamily: 'sans-serif',
-                    color: state === 'upcoming' ? COLORS.textDim : COLORS.text,
+                    color: state === 'upcoming' ? 'rgba(255,255,255,0.6)' : COLORS.text,
                     whiteSpace: 'nowrap',
                     maxWidth: 72,
                     textAlign: 'center',
