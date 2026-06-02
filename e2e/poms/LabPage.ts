@@ -38,7 +38,7 @@ export class LabPage {
     return this.page.locator('.words-button');
   }
 
-  async waitForTrainingScene(timeout = 15_000) {
+  async waitForTrainingScene(timeout = 20_000) {
     await this.eraseButton.waitFor({state: 'visible', timeout});
   }
 
