@@ -6,7 +6,7 @@ A self-contained, embeddable web app that sequences the five interactive modes o
 
 ```html
 <!-- padding-top = 9/16 canvas + 52px progress bar -->
-<div style="position:relative; width:100%; padding-top:calc(56.25% + 52px);">
+<div style="position:relative; width:100%; padding-top:calc(56.25% + 48px);">
   <iframe
     src="https://code-dot-org.github.io/ai-literacy-oceans/"
     style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;"
