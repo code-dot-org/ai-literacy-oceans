@@ -12,7 +12,7 @@ const EN_STEP_LABELS = [
   'Label Fish & Trash',
   'Bias in Action',
   'Retrain Fairly',
-  'Pick a Simple Word',
+  'Labels Shape A.I.',
   'Teach AI a New Word',
 ];
 
