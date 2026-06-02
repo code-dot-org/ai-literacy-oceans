@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview --base /ai-literacy-oceans/",
+    "preview": "vite preview --base /ai-literacy-oceans/ --port 5173",
     "test:ui": "playwright test",
     "test:ui:ci": "CI=true playwright test"
   },
