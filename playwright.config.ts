@@ -17,7 +17,14 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: {...devices['Desktop Chrome']},
+      use: {
+        ...devices['Desktop Chrome'],
+        launchOptions: {
+          // SwiftShader lets TFJS use the WebGL backend (CPU-based GL) in CI
+          // containers without a GPU, which is far faster than TFJS's pure-CPU fallback.
+          args: ['--use-gl=swiftshader'],
+        },
+      },
     },
   ],
   webServer: {
