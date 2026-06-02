@@ -1,13 +1,25 @@
 import {expect, test} from 'playwright/test';
 
 /**
- * Tests session-storage persistence of progress across page reloads.
+ * Tests session-storage persistence. Uses sessionStorage as a state setup
+ * mechanism — Playwright's endorsed pattern for seeding client-side state
+ * before navigation, equivalent to setting cookies in server-side apps.
  */
 test.describe('Session persistence', () => {
-  test('completed steps survive reload', async ({page}) => {
+  test('fresh load has no completed steps', async ({page}) => {
     await page.goto('/');
+    for (let i = 0; i < 5; i++) {
+      await expect(page.getByTestId(`step-${i}`)).not.toHaveAttribute(
+        'data-state',
+        'completed',
+      );
+    }
+  });
 
-    // Mark steps 0 and 1 as completed via sessionStorage directly.
+  test('completed steps and active mode are restored after reload', async ({
+    page,
+  }) => {
+    await page.goto('/');
     await page.evaluate(() => {
       sessionStorage.setItem('oceans-completed', JSON.stringify([0, 1]));
       sessionStorage.setItem('oceans-mode', '2');
@@ -20,10 +32,17 @@ test.describe('Session persistence', () => {
     await expect(page.getByTestId('lab-area')).toHaveAttribute('data-mode', 'creaturesvtrash');
   });
 
-  test('fresh load has no completed steps', async ({page}) => {
+  test('navigation after restore keeps prior completed steps', async ({page}) => {
     await page.goto('/');
-    for (let i = 0; i < 5; i++) {
-      await expect(page.getByTestId(`step-${i}`)).not.toHaveAttribute('data-state', 'completed');
-    }
+    await page.evaluate(() => {
+      sessionStorage.setItem('oceans-completed', JSON.stringify([0]));
+      sessionStorage.setItem('oceans-mode', '1');
+    });
+    await page.reload();
+
+    // Navigate away and back — step 0 should still be completed.
+    await page.getByTestId('step-3').click();
+    await page.getByTestId('step-1').click();
+    await expect(page.getByTestId('step-0')).toHaveAttribute('data-state', 'completed');
   });
 });

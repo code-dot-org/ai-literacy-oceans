@@ -221,12 +221,12 @@ export default function App() {
       >
         <div style={{width: '100%', maxWidth: `calc(${labHeight} * 16 / 9)`}}>
           <OceansLab
-            appMode={MODES[modeIndex] as AppMode}
-            guides="HoC"
-            textToSpeechLocale={locale !== 'en' ? locale : undefined}
-            strings={strings}
-            onContinue={handleContinue}
-          />
+              appMode={MODES[modeIndex] as AppMode}
+              guides="HoC"
+              textToSpeechLocale={locale !== 'en' ? locale : undefined}
+              strings={strings}
+              onContinue={handleContinue}
+            />
         </div>
       </div>
     </>
