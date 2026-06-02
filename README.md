@@ -10,7 +10,6 @@ A self-contained, embeddable web app that sequences the five interactive modes o
   <iframe
     src="https://code-dot-org.github.io/ai-literacy-oceans/"
     style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;"
-    allow="microphone"
     title="AI for Oceans">
   </iframe>
 </div>
