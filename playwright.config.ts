@@ -24,9 +24,9 @@ export default defineConfig({
     // Use the production build for e2e — pre-bundled assets avoid Vite's
     // per-request transform overhead, which caused TFJS model load timeouts
     // when multiple browser instances ran in parallel against the dev server.
-    command: process.env.CI
-      ? 'pnpm build && pnpm preview'
-      : 'pnpm dev',
+    // In CI the GHA "Build" step already produced dist/; just serve it.
+    // Locally fall back to dev server for HMR.
+    command: process.env.CI ? 'pnpm preview' : 'pnpm dev',
     url: 'http://localhost:5173/ai-literacy-oceans/',
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
