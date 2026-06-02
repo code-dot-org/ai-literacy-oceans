@@ -2,8 +2,7 @@ import {defineConfig, devices} from 'playwright/test';
 
 export default defineConfig({
   testDir: './e2e',
-  fullyParallel: false,
-  workers: 1,
+  fullyParallel: true,
   retries: process.env.CI ? 2 : 0,
   reporter: 'html',
   use: {
@@ -19,7 +18,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run dev',
+    command: 'pnpm dev',
     url: 'http://localhost:5173/ai-literacy-oceans/',
     reuseExistingServer: !process.env.CI,
   },
