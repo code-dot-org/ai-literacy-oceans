@@ -3,9 +3,20 @@ import {useEffect, useState} from 'react';
 import OceansLab from '@code-dot-org/oceans-lab';
 import '@code-dot-org/oceans-lab/styles.css';
 
+import Progress, {type Step} from './Progress';
 import {detectLocale, loadStrings, SUPPORTED_LOCALES} from './locale';
 
-const SEQUENCE = [
+// ── Sequence ────────────────────────────────────────────────────────────────
+
+const STEPS: Step[] = [
+  {index: 0, label: 'Fish vs Trash'},
+  {index: 1, label: 'Creatures Demo'},
+  {index: 2, label: 'Creatures vs Trash'},
+  {index: 3, label: 'Fish Short'},
+  {index: 4, label: 'Fish Long'},
+];
+
+const MODES = [
   'fishvtrash',
   'creaturesvtrashdemo',
   'creaturesvtrash',
@@ -13,14 +24,60 @@ const SEQUENCE = [
   'long',
 ] as const;
 
-type AppMode = (typeof SEQUENCE)[number];
+type AppMode = (typeof MODES)[number];
+
+// ── Session persistence ─────────────────────────────────────────────────────
+
+const SESSION_COMPLETED = 'oceans-completed';
+const SESSION_MODE = 'oceans-mode';
+
+function loadSession(): {modeIndex: number; completed: Set<number>} {
+  try {
+    const completed = new Set<number>(
+      JSON.parse(sessionStorage.getItem(SESSION_COMPLETED) ?? '[]'),
+    );
+    const modeIndex = Math.min(
+      parseInt(sessionStorage.getItem(SESSION_MODE) ?? '0', 10),
+      MODES.length - 1,
+    );
+    return {modeIndex, completed};
+  } catch {
+    return {modeIndex: 0, completed: new Set()};
+  }
+}
+
+function saveSession(modeIndex: number, completed: Set<number>) {
+  sessionStorage.setItem(SESSION_COMPLETED, JSON.stringify([...completed]));
+  sessionStorage.setItem(SESSION_MODE, String(modeIndex));
+}
+
+// ── Language / URL param ────────────────────────────────────────────────────
+
+function getInitialLocale(): string {
+  const params = new URLSearchParams(window.location.search);
+  const lang = params.get('lang');
+  if (lang && lang in SUPPORTED_LOCALES) return lang;
+  return detectLocale();
+}
+
+function setLangParam(lang: string) {
+  const params = new URLSearchParams(window.location.search);
+  params.set('lang', lang);
+  history.replaceState(null, '', `?${params.toString()}`);
+}
+
+// ── App ─────────────────────────────────────────────────────────────────────
 
 const DARK_BG = 'rgb(2, 0, 28)';
+const PROGRESS_BAR_HEIGHT = 62;
 
 export default function App() {
-  const [modeIndex, setModeIndex] = useState(0);
+  const session = loadSession();
+  const [modeIndex, setModeIndex] = useState(session.modeIndex);
+  const [completed, setCompleted] = useState<Set<number>>(session.completed);
   const [done, setDone] = useState(false);
-  const [locale, setLocale] = useState(() => detectLocale());
+
+  const [locale, setLocale] = useState(getInitialLocale);
   const [strings, setStrings] = useState<Record<string, string> | undefined>();
 
   useEffect(() => {
@@ -29,23 +86,41 @@ export default function App() {
       .catch(() => setStrings(undefined));
   }, [locale]);
 
+  // Persist progress to sessionStorage on every change.
+  useEffect(() => {
+    saveSession(modeIndex, completed);
+  }, [modeIndex, completed]);
+
+  function navigate(index: number) {
+    setModeIndex(index);
+    setDone(false);
+  }
+
   function handleContinue() {
-    if (modeIndex < SEQUENCE.length - 1) {
-      setModeIndex(i => i + 1);
+    const next = modeIndex + 1;
+    setCompleted(prev => new Set([...prev, modeIndex]));
+    if (next < MODES.length) {
+      setModeIndex(next);
     } else {
       setDone(true);
     }
   }
 
   function handlePlayAgain() {
+    setCompleted(new Set());
     setModeIndex(0);
     setDone(false);
   }
 
-  const localeSelector = (
+  function handleLocaleChange(lang: string) {
+    setLocale(lang);
+    setLangParam(lang);
+  }
+
+  const langSelector = (
     <select
       value={locale}
-      onChange={e => setLocale(e.target.value)}
+      onChange={e => handleLocaleChange(e.target.value)}
       style={{
         position: 'fixed',
         top: 8,
@@ -69,10 +144,20 @@ export default function App() {
     </select>
   );
 
+  const progress = (
+    <Progress
+      steps={STEPS}
+      currentIndex={done ? -1 : modeIndex}
+      completedIndices={done ? new Set(STEPS.map(s => s.index)) : completed}
+      onNavigate={navigate}
+    />
+  );
+
   if (done) {
     return (
       <>
-        {localeSelector}
+        {langSelector}
+        {progress}
         <div
           data-testid="play-again-screen"
           style={{
@@ -80,7 +165,7 @@ export default function App() {
             alignItems: 'center',
             justifyContent: 'center',
             width: '100vw',
-            height: '100vh',
+            height: `calc(100vh - ${PROGRESS_BAR_HEIGHT}px)`,
             background: DARK_BG,
           }}
         >
@@ -108,20 +193,21 @@ export default function App() {
 
   return (
     <>
-      {localeSelector}
+      {langSelector}
+      {progress}
       <div
         style={{
           width: '100vw',
-          height: '100vh',
+          height: `calc(100vh - ${PROGRESS_BAR_HEIGHT}px)`,
           background: DARK_BG,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        <div style={{width: '100%', maxWidth: 'calc(100vh * 16 / 9)'}}>
+        <div style={{width: '100%', maxWidth: `calc((100vh - ${PROGRESS_BAR_HEIGHT}px) * 16 / 9)`}}>
           <OceansLab
-            appMode={SEQUENCE[modeIndex] as AppMode}
+            appMode={MODES[modeIndex] as AppMode}
             guides="HoC"
             textToSpeechLocale={locale !== 'en' ? locale : undefined}
             strings={strings}
