@@ -19,7 +19,8 @@ test.describe('Play again', () => {
 
   test('completing the last mode shows the play-again screen', async ({page}) => {
     const continueBtn = page.getByRole('button', {name: 'Continue'}).first();
-    await continueBtn.waitFor({state: 'visible'});
+    // TFJS model load in CI (SwiftShader, no GPU) can take 30-40s.
+    await continueBtn.waitFor({state: 'visible', timeout: 50_000});
     await continueBtn.click();
 
     await expect(page.getByTestId('play-again-screen')).toBeVisible();
@@ -28,7 +29,8 @@ test.describe('Play again', () => {
 
   test('play-again resets progress and returns to step 0', async ({page}) => {
     const continueBtn = page.getByRole('button', {name: 'Continue'}).first();
-    await continueBtn.waitFor({state: 'visible'});
+    // TFJS model load in CI (SwiftShader, no GPU) can take 30-40s.
+    await continueBtn.waitFor({state: 'visible', timeout: 50_000});
     await continueBtn.click();
 
     await page.getByTestId('play-again-btn').click();
