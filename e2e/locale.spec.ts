@@ -42,6 +42,19 @@ test('changing dropdown updates step labels immediately', async ({page}) => {
   await expect(page.getByTestId('step-0')).toHaveAttribute('aria-label', 'Etichettare pesci e rifiuti');
 });
 
+test('rapid language switching settles on the last selection without crashing', async ({page}) => {
+  await page.goto('/');
+  const lang = page.getByLabel('Language');
+  // Fire three switches back-to-back so earlier strings chunks are still in
+  // flight when later ones are requested (regression: stale loads used to
+  // land mid-animation and could black-screen the lab).
+  await lang.selectOption('fr');
+  await lang.selectOption('de');
+  await lang.selectOption('it');
+  await expect(page.getByTestId('step-0')).toHaveAttribute('aria-label', 'Etichettare pesci e rifiuti');
+  await expect(page.getByTestId('lab-area')).toBeVisible();
+});
+
 test('query param takes precedence over browser locale', async ({browser}) => {
   const ctx = await browser.newContext({locale: 'de-DE'});
   const page = await ctx.newPage();

@@ -84,12 +84,27 @@ export default function App() {
   const [done, setDone] = useState(false);
 
   const [locale, setLocale] = useState(getInitialLocale);
-  const [strings, setStrings] = useState<Record<string, string> | undefined>();
+  // The locale+strings pair actually fed to OceansLab. Updated only after the
+  // strings chunk resolves, so the lab never renders a locale whose strings
+  // are still in flight; the stale flag drops superseded loads when the user
+  // switches languages faster than chunks arrive.
+  const [applied, setApplied] = useState<{
+    locale: string;
+    strings?: Record<string, string>;
+  }>({locale: 'en'});
 
   useEffect(() => {
+    let stale = false;
     loadStrings(locale)
-      .then(setStrings)
-      .catch(() => setStrings(undefined));
+      .then(strings => {
+        if (!stale) setApplied({locale, strings});
+      })
+      .catch(() => {
+        if (!stale) setApplied({locale, strings: undefined});
+      });
+    return () => {
+      stale = true;
+    };
   }, [locale]);
 
   // Persist progress to sessionStorage on every change.
@@ -150,7 +165,7 @@ export default function App() {
     </select>
   );
 
-  const steps = buildSteps(strings);
+  const steps = buildSteps(applied.strings);
   const progress = (
     <Progress
       steps={steps}
@@ -221,11 +236,15 @@ export default function App() {
       >
         {/* height:100% + aspect-ratio gives a true 16:9 box inside the flex area */}
         <div style={{height: '100%', aspectRatio: '16/9', maxWidth: '100%'}}>
+          {/* key forces a clean remount on language change — the lab does not
+              support live strings/textToSpeechLocale swaps mid-animation (on
+              code.org a locale change is a full page reload). */}
           <OceansLab
+            key={applied.locale}
             appMode={MODES[modeIndex] as AppMode}
             guides="HoC"
-            textToSpeechLocale={locale !== 'en' ? locale : undefined}
-            strings={strings}
+            textToSpeechLocale={applied.locale !== 'en' ? applied.locale : undefined}
+            strings={applied.strings}
             onContinue={handleContinue}
           />
         </div>
