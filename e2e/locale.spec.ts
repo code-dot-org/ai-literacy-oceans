@@ -30,27 +30,39 @@ test('language dropdown shows current locale', async ({page}) => {
   await expect(page.getByLabel('Language')).toHaveValue('fr');
 });
 
-test('changing dropdown updates URL param', async ({page}) => {
+test('changing dropdown reloads with the new URL param', async ({page}) => {
   await page.goto('/');
-  await page.getByLabel('Language').selectOption('de');
+  await Promise.all([
+    page.waitForURL(/lang=de/),
+    page.getByLabel('Language').selectOption('de'),
+  ]);
   expect(page.url()).toContain('lang=de');
 });
 
-test('changing dropdown updates step labels immediately', async ({page}) => {
+test('changing dropdown updates step labels', async ({page}) => {
   await page.goto('/');
-  await page.getByLabel('Language').selectOption('it');
+  await Promise.all([
+    page.waitForURL(/lang=it/),
+    page.getByLabel('Language').selectOption('it'),
+  ]);
   await expect(page.getByTestId('step-0')).toHaveAttribute('aria-label', 'Etichettare pesci e rifiuti');
 });
 
-test('rapid language switching settles on the last selection without crashing', async ({page}) => {
-  await page.goto('/');
-  const lang = page.getByLabel('Language');
-  // Fire three switches back-to-back so earlier strings chunks are still in
-  // flight when later ones are requested (regression: stale loads used to
-  // land mid-animation and could black-screen the lab).
-  await lang.selectOption('fr');
-  await lang.selectOption('de');
-  await lang.selectOption('it');
+test('switching language reloads the iframe with the new ?lang and renders the lab', async ({page}) => {
+  // A language change is a full reload, not a live prop swap: OceansLab keeps
+  // locale-dependent state in module-level singletons (cached overlay root,
+  // global state, audio/TTS, timers) that a React update cannot reset, which
+  // black-screened the lab and left audio playing. Reload tears it all down.
+  await page.goto('/?lang=fr');
+  await expect(page.getByTestId('step-0')).toHaveAttribute('aria-label', 'Étiqueter poissons et déchets');
+
+  await Promise.all([
+    page.waitForURL(/lang=it/),
+    page.getByLabel('Language').selectOption('it'),
+  ]);
+
+  // After the reload the lab mounts fresh in the new locale.
+  await expect(page.getByLabel('Language')).toHaveValue('it');
   await expect(page.getByTestId('step-0')).toHaveAttribute('aria-label', 'Etichettare pesci e rifiuti');
   await expect(page.getByTestId('lab-area')).toBeVisible();
 });

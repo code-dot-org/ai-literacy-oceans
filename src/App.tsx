@@ -67,10 +67,19 @@ function getInitialLocale(): string {
   return detectLocale();
 }
 
-function setLangParam(lang: string) {
+// A language change is a full iframe reload, not a live prop swap. OceansLab
+// holds locale-dependent state in module-level singletons — a cached overlay
+// React root, a global mutable state object, the audio/TTS engine, and pending
+// timers — none of which a React remount or in-place prop update resets. (On
+// code.org a locale change is likewise a full page reload.) Reloading tears all
+// of that down: audio/speechSynthesis stop on navigation and the lab re-inits
+// cleanly for the new locale. Progress persists in sessionStorage, so the user
+// stays on the same mode; only the current mode's animation restarts.
+function reloadWithLang(lang: string) {
+  window.speechSynthesis?.cancel(); // stop TTS immediately, before the reload
   const params = new URLSearchParams(window.location.search);
   params.set('lang', lang);
-  history.replaceState(null, '', `?${params.toString()}`);
+  window.location.search = params.toString();
 }
 
 // ── App ─────────────────────────────────────────────────────────────────────
@@ -83,28 +92,15 @@ export default function App() {
   const [completed, setCompleted] = useState<Set<number>>(session.completed);
   const [done, setDone] = useState(false);
 
-  const [locale, setLocale] = useState(getInitialLocale);
-  // The locale+strings pair actually fed to OceansLab. Updated only after the
-  // strings chunk resolves, so the lab never renders a locale whose strings
-  // are still in flight; the stale flag drops superseded loads when the user
-  // switches languages faster than chunks arrive.
-  const [applied, setApplied] = useState<{
-    locale: string;
-    strings?: Record<string, string>;
-  }>({locale: 'en'});
+  // Locale is fixed for the lifetime of the page — changing it reloads the
+  // iframe (see reloadWithLang), so this never changes after mount.
+  const [locale] = useState(getInitialLocale);
+  const [strings, setStrings] = useState<Record<string, string> | undefined>();
 
   useEffect(() => {
-    let stale = false;
     loadStrings(locale)
-      .then(strings => {
-        if (!stale) setApplied({locale, strings});
-      })
-      .catch(() => {
-        if (!stale) setApplied({locale, strings: undefined});
-      });
-    return () => {
-      stale = true;
-    };
+      .then(setStrings)
+      .catch(() => setStrings(undefined));
   }, [locale]);
 
   // Persist progress to sessionStorage on every change.
@@ -134,8 +130,8 @@ export default function App() {
   }
 
   function handleLocaleChange(lang: string) {
-    setLocale(lang);
-    setLangParam(lang);
+    if (lang === locale) return;
+    reloadWithLang(lang);
   }
 
   const langSelector = (
@@ -165,7 +161,7 @@ export default function App() {
     </select>
   );
 
-  const steps = buildSteps(applied.strings);
+  const steps = buildSteps(strings);
   const progress = (
     <Progress
       steps={steps}
@@ -236,15 +232,11 @@ export default function App() {
       >
         {/* height:100% + aspect-ratio gives a true 16:9 box inside the flex area */}
         <div style={{height: '100%', aspectRatio: '16/9', maxWidth: '100%'}}>
-          {/* key forces a clean remount on language change — the lab does not
-              support live strings/textToSpeechLocale swaps mid-animation (on
-              code.org a locale change is a full page reload). */}
           <OceansLab
-            key={applied.locale}
             appMode={MODES[modeIndex] as AppMode}
             guides="HoC"
-            textToSpeechLocale={applied.locale !== 'en' ? applied.locale : undefined}
-            strings={applied.strings}
+            textToSpeechLocale={locale !== 'en' ? locale : undefined}
+            strings={strings}
             onContinue={handleContinue}
           />
         </div>
