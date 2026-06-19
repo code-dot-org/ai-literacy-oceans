@@ -25,6 +25,17 @@ test('invalid ?lang= falls back to English', async ({page}) => {
   await expect(page.getByTestId('step-0')).toHaveAttribute('aria-label', 'Label Fish & Trash');
 });
 
+// Regression: we omit textToSpeechLocale (so the typing sound plays in every
+// locale), which makes the lab compile catalogs with English plural rules. Its
+// ICU compiler throws on `few`/`many` branches, so locales with extra plural
+// categories (pl, cs, …) crashed until we stripped those branches on load.
+test('?lang=pl (complex plural rules) loads without crashing', async ({page}) => {
+  await page.goto('/?lang=pl');
+  await expect(page.getByTestId('step-0')).toHaveAttribute('aria-label', 'Oznaczaj ryby i śmieci');
+  await expect(page.getByTestId('lab-area')).toBeVisible();
+  await expect(page.getByTestId('error-screen')).toHaveCount(0);
+});
+
 test('language dropdown shows current locale', async ({page}) => {
   await page.goto('/?lang=fr');
   await expect(page.getByLabel('Language')).toHaveValue('fr');

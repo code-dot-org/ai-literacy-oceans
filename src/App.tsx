@@ -69,14 +69,13 @@ function getInitialLocale(): string {
 
 // A language change is a full iframe reload, not a live prop swap. OceansLab
 // holds locale-dependent state in module-level singletons — a cached overlay
-// React root, a global mutable state object, the audio/TTS engine, and pending
+// React root, a global mutable state object, the audio engine, and pending
 // timers — none of which a React remount or in-place prop update resets. (On
 // code.org a locale change is likewise a full page reload.) Reloading tears all
-// of that down: audio/speechSynthesis stop on navigation and the lab re-inits
-// cleanly for the new locale. Progress persists in sessionStorage, so the user
-// stays on the same mode; only the current mode's animation restarts.
+// of that down: audio stops on navigation and the lab re-inits cleanly for the
+// new locale. Progress persists in sessionStorage, so the user stays on the
+// same mode; only the current mode's animation restarts.
 function reloadWithLang(lang: string) {
-  window.speechSynthesis?.cancel(); // stop TTS immediately, before the reload
   const params = new URLSearchParams(window.location.search);
   params.set('lang', lang);
   window.location.search = params.toString();
@@ -232,10 +231,16 @@ export default function App() {
       >
         {/* height:100% + aspect-ratio gives a true 16:9 box inside the flex area */}
         <div style={{height: '100%', aspectRatio: '16/9', maxWidth: '100%'}}>
+          {/* textToSpeechLocale is intentionally omitted. The lab gates its
+              "typing" sound effect on this being unset, and switches to spoken
+              TTS when it's set — and only Italian ships voice data, so passing
+              it silences the typing sound for every other locale. Omitting it
+              keeps the typing sound in all languages. Trade-off: the lab also
+              uses this value for ICU plural rules, so plurals fall back to
+              English rules (affects fishshort/fishlong-pond-init1 only). */}
           <OceansLab
             appMode={MODES[modeIndex] as AppMode}
             guides="HoC"
-            textToSpeechLocale={locale !== 'en' ? locale : undefined}
             strings={strings}
             onContinue={handleContinue}
           />
